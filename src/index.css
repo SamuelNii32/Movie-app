@@ -1,13 +1,488 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  font-family: "Roboto", sans-serif;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* App component styles */
+.app-container {
+  padding: 3rem;
+}
+
+.content-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Header component styles */
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: 8.75rem;
+  height: 8.75rem;
+  object-fit: cover;
+  margin-bottom: 0.625rem;
+}
+
+.title {
+  font-size: 2.5rem;
+  margin: 0;
+}
+
+/* MovieList component styles */
+
+.movie-list-container {
+  display: flex;
+  flex-direction: column; /* Ensure both elements are in the same container */
+  gap: 1.2rem;
+  margin-left: 1.4rem;
+  margin-top: 2rem; /* Adjust spacing between GenreDropdown and MovieList */
+}
+
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* SortingDropdown component styles */
+.sorting-dropdown {
+  margin-bottom: 1.2rem;
+  /* Adds space below SortingDropdown */
+}
+
+select {
+  padding: 0.5rem;
+  font-size: 1rem;
+  border-radius: 0.5rem;
+  border: 1px solid #ccc;
+}
+
+select option {
+  display: flex;
+  align-items: center;
+}
+
+select option span {
+  display: flex;
+  align-items: center;
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: auto;
+  display: flex; /* Already added for centering */
+  justify-content: center;
+  align-items: center;
+  opacity: 0; /* Start invisible */
+}
+
+.modal.open {
+  display: flex;
+  opacity: 1; /* Fully visible when open */
+  animation: fadeIn 0.3s ease-in-out; /* Animation when opening */
+}
+
+/* Define the fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0; /* Start transparent */
+  }
+  to {
+    opacity: 1; /* End fully visible */
+  }
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 600px;
+  position: relative;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Rest of your CSS (close, movie-details-modal-info, etc.) stays the same */
+
+/* Close Button */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  font-size: 24px;
+  cursor: pointer;
+  color: #aaa;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+}
+
+/* Form Styling */
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+input[type="text"],
+textarea,
+input[type="number"],
+select {
+  width: 100%;
+  padding: 8px;
+  margin-top: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  resize: vertical;
+}
+
+input[type="checkbox"] {
+  margin-top: 10px;
+}
+
+/* Button */
+.modal button {
+  background-color: black;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-top: 10px;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+button:hover {
+  background-color: #666;
+}
+
+/* Button */
+.add-movie-button {
+  background-color: black; /* Blue color */
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin-bottom: 10px; /* Adjust margin as needed */
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.add-movie-button:hover {
+  background-color: #666;
+}
+
+.add-movie-button:focus {
+  outline: none; /* Remove outline on focus */
+}
+
+.movie-list-container {
+  display: flex;
+  flex-direction: column; /* Ensure both elements are in the same container */
+  gap: 1.2rem;
+  margin-left: 1.4rem; /* Adjust spacing between GenreDropdown and MovieList */
+}
+
+.top-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+/* MovieList component styles */
+.movie-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Three columns with equal width */
+  gap: 1.2rem 0.9rem; /* Gap between movie cards */
+}
+
+.movie-card {
+  border: 1px solid #ccc;
+  padding: 1rem; /* Adjusted padding */
+  border-radius: 0.375rem;
+  display: flex;
+  flex-direction: column;
+  max-width: 12rem;
+  position: relative;
+}
+
+.no-movies-message {
+  text-align: center;
+  font-size: 1.5rem;
+  color: #666;
+  padding: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 0.5rem;
+  background-color: #f9f9f9;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+}
+.movie-card .card-image {
+  width: 100%;
+  height: auto;
+  border-radius: 0.5rem;
+  max-height: 5.375rem;
+  max-width: 5.375rem;
+  margin: auto; /* Adjusted maximum height */
+}
+
+.arrow-icon {
+  font-size: 1.6rem;
+  color: #555;
+  margin-right: 1.2rem;
+  transition: transform 0.3s ease-in-out; /* Smooth scaling */
+}
+
+.arrow-icon.clicked {
+  transform: scale(1.2); /* Grow 20% bigger when clicked */
+}
+
+.watched-status {
+  display: inline-block;
+  margin-bottom: 30px;
+}
+
+.watched-status.watched {
+  color: black;
+  background-color: #c8ecd1;
+  padding: 2px 10px;
+}
+
+.watched-status.not-watched {
+  color: black;
+  background-color: #f3ced3;
+  padding: 2px 10px;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+}
+
+.arrow-icon {
+  font-size: 1.6rem; /* Adjust icon size as needed */
+  color: #555; /* Adjust icon color */
+  margin-right: 1.2rem; /* Adjust spacing between icon and title */
+}
+
+/* Edit and Delete Buttons */
+.edit-button,
+.delete-button {
+  position: absolute;
+  bottom: 10px; /* Adjust as needed */
+  right: 10px; /* Adjust as needed */
+  padding: 5px 10px;
+  text-align: center;
+  border: none;
+  display: inline-block;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.edit-button {
+  right: 50px; /* Space between edit and delete buttons */
+}
+
+.edit-button:hover,
+.delete-button:hover {
+  background-color: #666; /* Darker color on hover */
+}
+
+/* GenreDropdown component styles */
+.dropdown-card {
+  border: 1px solid #ccc;
+  padding: 0.9375rem;
+  width: 100%; /* Adjust width as needed */
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  margin-bottom: 1.25rem;
+  margin-top: 2rem; /* Adds space below GenreDropdown */
+}
+
+.dropdown-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.dropdown-card-header h5 {
+  margin: 60px;
+}
+
+.dropdown-card-body {
+  margin-top: 0.625rem;
+}
+
+.dropdown-button {
+  margin-left: 1.75rem; /* Pushes the genre button to the right */
+}
+
+.dropdown-button-text {
+  width: 100%;
+  padding: 0.625rem;
+  border: none;
+  display: flex;
+  align-items: center;
+}
+
+.dropdown-title {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.dropdown-icon {
+  margin-right: 0.3125rem; /* Adjust spacing between icon and text */
+}
+
+.dropdown-button-icon {
+  margin-left: 0.3125rem;
+}
+
+.dropdown-list {
+  margin-left: 1.75rem;
+}
+.genre-item {
+  cursor: pointer;
+  padding: 5px;
+  transition: background-color 0.3s; /* Smooth transition for background color */
+}
+
+.genre-item:hover {
+  background-color: #f0f0f0;
+}
+
+.genre-item.selected {
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Platform component styles */
+
+.platform-item-card {
+  border: 1px solid #ccc;
+  padding: 0.5375rem;
+  width: 90%; /* Adjust width as needed */
+  box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+  border-radius: 0.5rem;
+  margin-bottom: 2.25rem;
+  margin-top: 2.25rem;
+
+  /* Adds space below Platform component */
+}
+
+.platform-card-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.625rem;
+}
+
+.platform-card-header h5 {
+  margin: 0;
+}
+
+.platform-icon {
+  margin-right: 0.2rem;
+}
+
+.movie-details-modal-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.details-title {
+  margin-left: 50px;
+}
+
+.info-item {
+  display: flex;
+  flex-wrap: wrap; /* Ensure items wrap to next line if needed */
+  margin-bottom: 8px;
+  margin-left: 40px;
+}
+
+.info-item strong {
+  width: 100px; /* Adjust as necessary for label width */
+  font-weight: bold;
+}
+
+.info-item span {
+  flex: 1; /* Take up remaining space */
+  word-wrap: break-word; /* Ensure long words wrap */
+  text-indent: 0; /* Reset text indentation */
+  padding-left: 60px; /* Padding to align with label */
+  text-align: justify; /* Justify text */
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+.form-group label {
+  font-weight: bold;
+}
+
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-group textarea {
+  height: 150px; /* Adjust textarea height */
+}
+
+.modal-footer {
+  margin-top: 20px;
+  text-align: right;
+}
+
+.modal-footer button {
+  margin-left: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  background-color: black;
+  color: #fff;
+}
+
+.modal-footer button:hover {
+  background-color: #666;
 }
